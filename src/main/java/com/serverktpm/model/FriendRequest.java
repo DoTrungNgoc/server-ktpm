@@ -1,6 +1,6 @@
-package com.example.serverktpm.model;
+package com.serverktpm.model;
 
-import com.example.serverktpm.common.FriendRequestStatus;
+import com.serverktpm.common.FriendRequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

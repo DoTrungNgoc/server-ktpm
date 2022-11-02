@@ -1,4 +1,4 @@
-package com.example.serverktpm.common;
+package com.serverktpm.common;
 
 public class MessageType {
     public static Integer TEXT = 0;

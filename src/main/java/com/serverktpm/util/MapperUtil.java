@@ -1,4 +1,4 @@
-package com.example.serverktpm.util;
+package com.serverktpm.util;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

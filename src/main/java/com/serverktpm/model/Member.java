@@ -1,4 +1,4 @@
-package com.example.serverktpm.model;
+package com.serverktpm.model;
 
 
 import lombok.Data;

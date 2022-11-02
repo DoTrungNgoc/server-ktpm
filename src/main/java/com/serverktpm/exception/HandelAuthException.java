@@ -1,7 +1,7 @@
-package com.example.serverktpm.exception;
+package com.serverktpm.exception;
 
-import com.example.serverktpm.common.WrapResponseStatus;
-import com.example.serverktpm.response.WrapResponse;
+import com.serverktpm.common.WrapResponseStatus;
+import com.serverktpm.response.WrapResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;

@@ -1,7 +1,7 @@
-package com.example.serverktpm.model;
+package com.serverktpm.model;
 
 
-import com.example.serverktpm.common.MessageType;
+import com.serverktpm.common.MessageType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

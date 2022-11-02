@@ -1,4 +1,4 @@
-package com.example.serverktpm.exception;
+package com.serverktpm.exception;
 
 public class SecurityException extends RuntimeException{
     private String message;

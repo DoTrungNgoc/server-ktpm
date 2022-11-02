@@ -1,4 +1,4 @@
-package com.example.serverktpm.exception;
+package com.serverktpm.exception;
 
 import lombok.Data;
 

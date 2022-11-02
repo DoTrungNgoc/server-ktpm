@@ -1,4 +1,4 @@
-package com.example.serverktpm;
+package com.serverktpm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

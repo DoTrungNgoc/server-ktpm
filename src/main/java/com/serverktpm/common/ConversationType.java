@@ -1,4 +1,4 @@
-package com.example.serverktpm.common;
+package com.serverktpm.common;
 
 public class ConversationType {
     public static Integer COUPLE = 0;

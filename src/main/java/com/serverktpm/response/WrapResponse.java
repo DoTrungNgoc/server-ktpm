@@ -1,6 +1,6 @@
-package com.example.serverktpm.response;
+package com.serverktpm.response;
 
-import com.example.serverktpm.common.WrapResponseStatus;
+import com.serverktpm.common.WrapResponseStatus;
 import lombok.Data;
 
 @Data
