@@ -9,7 +9,7 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-    private final String JWT_SECRET = "serverkientrucphanmem";
+    private final String JWT_SECRET = " javax.xml.bind.DatatypeConverterjavax.xml.bind.DatatypeConverterjavax.xml.bind.DatatypeConverterjavax.xml.bind.DatatypeConverter serverkientrucphanmem";
     private final long JWT_EXPIRATION = 604800000L;
 
     public String generateToken(String userId) {
