@@ -1,5 +1,7 @@
 package com.serverktpm.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -9,12 +11,9 @@ import com.serverktpm.response.auth.LoginResponse;
 import com.serverktpm.response.model.UserResponse;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ImageService {
     private final ImageRepository imageRepo;
-
-    public ImageService(ImageRepository imageRepo) {
-        this.imageRepo = imageRepo;
-    }
 
     public UserResponse mapImageUserForUserResponse(User user, UserResponse response){
         response.setAvatar(StringUtils.hasText(user.getAvatar()) ? imageRepo.findById(user.getAvatar()).get().getBase64(): "");

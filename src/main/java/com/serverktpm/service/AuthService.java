@@ -1,6 +1,8 @@
 package com.serverktpm.service;
 
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,18 +19,13 @@ import com.serverktpm.util.JwtTokenProvider;
 import com.serverktpm.util.MapperUtil;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthService {
     private final UserRepository userRepo;
     private final JwtTokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
 
-    public AuthService(UserRepository userRepo, JwtTokenProvider tokenProvider, PasswordEncoder passwordEncoder, ImageService imageService) {
-        this.userRepo = userRepo;
-        this.tokenProvider = tokenProvider;
-        this.passwordEncoder = passwordEncoder;
-        this.imageService = imageService;
-    }
 
     public RegisterResponse register(RegisterRequest request) {
         if (userRepo.existsByPhoneNumber(request.getPhoneNumber())){

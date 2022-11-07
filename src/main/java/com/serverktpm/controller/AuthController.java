@@ -1,6 +1,6 @@
 package com.serverktpm.controller;
-
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,16 +11,12 @@ import com.serverktpm.request.auth.RegisterRequest;
 import com.serverktpm.response.WrapResponse;
 import com.serverktpm.service.AuthService;
 
-
-
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
 	private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
     @PostMapping("/register")
     public WrapResponse register(@RequestBody RegisterRequest request){
