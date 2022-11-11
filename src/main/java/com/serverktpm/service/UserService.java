@@ -31,8 +31,11 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepo.findByIdAndIsBlock(userId, false).orElseThrow(() -> new UsernameNotFoundException("Invalid username or password."));
-        return new UserDetailsIm(user);
+        User user = userRepo.findByIdAndIsBlock(userId, false);
+        if (user != null) {
+            return new UserDetailsIm(user);
+        }
+        throw new UsernameNotFoundException("Invalid username or password.");
     }
 
 
