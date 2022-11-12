@@ -26,4 +26,7 @@ public class Conversation {
     private List<String> listMemberId;
     private Date createdDate = new Date();
     private Message lastMessage;
+
+    private Date lastSend = new Date();
+    private String adminId;
 }
