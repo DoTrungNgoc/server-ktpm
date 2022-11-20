@@ -4,6 +4,7 @@ import com.serverktpm.model.Conversation;
 import com.serverktpm.model.Message;
 import com.serverktpm.repository.ConversationRepository;
 import com.serverktpm.repository.MessageRepository;
+import com.serverktpm.socketModel.FriendRequestSocket;
 import com.serverktpm.socketModel.MessageSocket;
 import com.serverktpm.socketModel.ReactMessageSocket;
 import com.serverktpm.socketModel.RevertMessageSocket;
@@ -95,6 +96,10 @@ public class SocketService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendFriendRequestToUser(String toUserId, FriendRequestSocket friendRequest){
+        messagingTemplate.convertAndSend("/user/" + toUserId + "/friend-request",friendRequest);
     }
 
 }
