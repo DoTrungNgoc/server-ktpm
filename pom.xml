@@ -87,6 +87,13 @@
 			<artifactId>twilio</artifactId>
 			<version>7.0.0</version>
 		</dependency>
+
+<!--		s3 service -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.163</version>
+		</dependency>
 	</dependencies>
 
 	<build>
