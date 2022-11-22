@@ -1,11 +1,13 @@
 package com.serverktpm.service;
 
+import com.serverktpm.exception.NotFoundException;
 import com.serverktpm.exception.ServiceException;
 import com.serverktpm.model.Image;
 import com.serverktpm.model.User;
 import com.serverktpm.model.UserDetailsIm;
 import com.serverktpm.repository.ImageRepository;
 import com.serverktpm.repository.UserRepository;
+import com.serverktpm.request.auth.model.ChangePasswordRequest;
 import com.serverktpm.request.auth.model.UserCreateRequest;
 import com.serverktpm.request.auth.model.UserUpdateRequest;
 import com.serverktpm.response.model.UserResponse;
@@ -28,7 +30,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
     private final ImageRepository imageRepo;
-
+    private final ImageService imageService;
+    private final AuthService authService;
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepo.findByIdAndIsBlock(userId, false);
@@ -92,5 +95,21 @@ public class UserService implements UserDetailsService {
         user = userRepo.save(user);
         return MapperUtil.mapObject(user, UserResponse.class);
     }
-
+    public UserResponse getUserByPhoneNumber(String phoneNumber) {
+        Optional<User> userOpt = userRepo.findByPhoneNumber(phoneNumber);
+        if (!userOpt.isPresent()) {
+            throw new NotFoundException("Not found userphoneNumber: " + phoneNumber);
+        }
+        UserResponse response = MapperUtil.mapObject(userOpt.get(), UserResponse.class);
+        return imageService.mapImageUserForUserResponse(userOpt.get(),response);
+    }
+    public boolean changePassword(ChangePasswordRequest request) {
+        User user = userRepo.findById(authService.getLoggedUserId()).orElseThrow(() -> new NotFoundException("Not found user logged"));
+        if (!passwordEncoder.matches(request.getOldPassword(),user.getPassword())) {
+            throw new SecurityException("Old password not correct!");
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepo.save(user);
+        return true;
+    }
 }
