@@ -26,7 +26,6 @@ public class SocketService {
     private final JwtTokenProvider tokenProvider;
     private final MessageRepository messageRepo;
 
-
     public void handelAndSendMessageToAllUserOfConversation(MessageSocket message) {
         try {
             System.out.println(">>>>>>>> message");

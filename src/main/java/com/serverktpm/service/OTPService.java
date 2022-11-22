@@ -8,6 +8,8 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -23,7 +25,8 @@ public class OTPService {
     private String phoneFrom;
     private static final Integer EXPIRE_MIN = 2;
     private LoadingCache<String, Integer> otpCache;
-    public OTPService(){
+
+    public OTPService() {
         otpCache = CacheBuilder.newBuilder().
                 expireAfterWrite(EXPIRE_MIN, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
                     public Integer load(String key) {
@@ -32,38 +35,36 @@ public class OTPService {
                 });
     }
 
+    @Retryable(value = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public boolean sendOTP(String phoneNumber) {
-        try {
-            Twilio.init(TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN);
-            Message.creator(new PhoneNumber(phoneNumber),
-                    new PhoneNumber(phoneFrom), "Your opt register account " + generateOTP(phoneNumber)).create();
-            return true;
-        } catch (Exception e){
-            throw new ServiceException(e.getMessage());
-        }
+        Twilio.init(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+        Message.creator(new PhoneNumber(phoneNumber),
+                new PhoneNumber(phoneFrom), "Your opt register account " + generateOTP(phoneNumber)).create();
+        return true;
     }
 
 
-    private int generateOTP(String phone){
+    private int generateOTP(String phone) {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
         otpCache.put(phone, otp);
         return otp;
     }
 
-    public boolean validOtp(String phone, int otp){
-        try{
+    public boolean validOtp(String phone, int otp) {
+        try {
             Integer otpRoot = otpCache.get(phone);
-            if (otpRoot != null && otpRoot.equals(otp)){
+            if (otpRoot != null && otpRoot.equals(otp)) {
                 clearOTP(phone);
                 return true;
             }
             return false;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
-    private void clearOTP(String key){
+
+    private void clearOTP(String key) {
         otpCache.invalidate(key);
     }
 

@@ -31,8 +31,10 @@ public class MessageService {
     }
 
     public MessageFile uploadMessageFile(String id, MultipartFile file){
-        String url =  s3Service.uploadFile(file);
-        if (!StringUtils.hasText(url)) {
+        String url;
+        try {
+            url =  s3Service.uploadFile(file);
+        } catch (Exception e){
             throw new ServiceException("Can not upload message file");
         }
         fileRepository.findById(id).ifPresent(messageFile -> {

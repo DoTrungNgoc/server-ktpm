@@ -9,6 +9,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +35,7 @@ public class S3Service {
 
     @PostConstruct
     private void initializeAmazon() {
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey,secretKey);
+        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
         this.s3client = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .withRegion(Regions.AP_SOUTHEAST_1).build();
@@ -56,18 +58,13 @@ public class S3Service {
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
-    public String uploadFile(MultipartFile multipartFile) {
-
-        String fileUrl = "";
-        try {
-            File file = convertMultiPartToFile(multipartFile);
-            String fileName = generateFileName(multipartFile);
-            fileUrl = endpointS3Url + "/" + bucketName + "/" + fileName;
-            uploadFileTos3bucket(fileName, file);
-            file.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Retryable(value = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    public String uploadFile(MultipartFile multipartFile) throws IOException {
+        File file = convertMultiPartToFile(multipartFile);
+        String fileName = generateFileName(multipartFile);
+        String fileUrl = endpointS3Url + "/" + bucketName + "/" + fileName;
+        uploadFileTos3bucket(fileName, file);
+        file.delete();
         return fileUrl;
     }
 }
