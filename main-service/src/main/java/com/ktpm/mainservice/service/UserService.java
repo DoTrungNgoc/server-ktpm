@@ -1,7 +1,6 @@
 package com.ktpm.mainservice.service;
 
 
-
 import com.ktpm.mainservice.exception.NotFoundException;
 import com.ktpm.mainservice.exception.ServiceException;
 import com.ktpm.mainservice.model.Image;
@@ -14,7 +13,9 @@ import com.ktpm.mainservice.request.auth.model.UserCreateRequest;
 import com.ktpm.mainservice.request.auth.model.UserUpdateRequest;
 import com.ktpm.mainservice.response.model.UserResponse;
 import com.ktpm.mainservice.util.MapperUtil;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,7 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService implements UserDetailsService {
     private final UserRepository userRepo;
@@ -113,8 +115,15 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    @HystrixCommand(fallbackMethod = "defaultGetUserByPhoneNumber")
     public UserResponse getUserByPhoneNumber(String phoneNumber) {
         ResponseEntity<UserResponse> response=  restTemplate.getForEntity(url + "/phone-number/" + phoneNumber,UserResponse.class);
         return response.getBody();
+    }
+
+    @SuppressWarnings("unused")
+    UserResponse defaultGetUserByPhoneNumber(String productCode) {
+        return UserResponse.builder().id("0000-0000-0000")
+                .name("System not found").build();
     }
 }
