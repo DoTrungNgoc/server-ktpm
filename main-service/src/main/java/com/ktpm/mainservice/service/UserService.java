@@ -16,12 +16,14 @@ import com.ktpm.mainservice.response.model.UserResponse;
 import com.ktpm.mainservice.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -34,6 +36,10 @@ public class UserService implements UserDetailsService {
     private final ImageRepository imageRepo;
     private final ImageService imageService;
     private final AuthService authService;
+
+    private RestTemplate restTemplate = new RestTemplate();
+    String url = "http://localhost:8000/auth";
+
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepo.findByIdAndIsBlock(userId, false);
@@ -97,14 +103,6 @@ public class UserService implements UserDetailsService {
         user = userRepo.save(user);
         return MapperUtil.mapObject(user, UserResponse.class);
     }
-    public UserResponse getUserByPhoneNumber(String phoneNumber) {
-        Optional<User> userOpt = userRepo.findByPhoneNumber(phoneNumber);
-        if (!userOpt.isPresent()) {
-            throw new NotFoundException("Not found userphoneNumber: " + phoneNumber);
-        }
-        UserResponse response = MapperUtil.mapObject(userOpt.get(), UserResponse.class);
-        return imageService.mapImageUserForUserResponse(userOpt.get(),response);
-    }
     public boolean changePassword(ChangePasswordRequest request) {
         User user = userRepo.findById(authService.getLoggedUserId()).orElseThrow(() -> new NotFoundException("Not found user logged"));
         if (!passwordEncoder.matches(request.getOldPassword(),user.getPassword())) {
@@ -113,5 +111,10 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepo.save(user);
         return true;
+    }
+
+    public UserResponse getUserByPhoneNumber(String phoneNumber) {
+        ResponseEntity<UserResponse> response=  restTemplate.getForEntity(url + "/phone-number/" + phoneNumber,UserResponse.class);
+        return response.getBody();
     }
 }

@@ -1,5 +1,6 @@
 package com.ktpm.authservice.controller;
 import com.ktpm.authservice.response.WrapResponse;
+import com.ktpm.authservice.response.model.UserResponse;
 import com.ktpm.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class AuthController {
         return WrapResponse.ok(authService.login(request));
     }
 
-
+    @GetMapping("phone-number/{phoneNumber}")
+    public UserResponse getUserByPhoneNumber(@PathVariable String phoneNumber){
+        return authService.getUserByPhoneNumber(phoneNumber);
+    }
 
 }
