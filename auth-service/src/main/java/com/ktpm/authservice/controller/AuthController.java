@@ -1,8 +1,11 @@
 package com.ktpm.authservice.controller;
+import com.ktpm.authservice.model.User;
 import com.ktpm.authservice.response.WrapResponse;
+import com.ktpm.authservice.response.model.UserResponse;
 import com.ktpm.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.ktpm.authservice.request.LoginRequest;
 import com.ktpm.authservice.request.RegisterRequest;
@@ -13,6 +16,8 @@ import com.ktpm.authservice.request.RegisterRequest;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
     private final AuthService authService;
+
+
 
 
     @PostMapping("/register")
@@ -26,5 +31,8 @@ public class AuthController {
     }
 
 
-
+    @GetMapping("phone-number/{phoneNumber}")
+    public UserResponse getUserByPhoneNumber(@PathVariable String phoneNumber){
+        return authService.getUserByPhoneNumber(phoneNumber);
+    }
 }

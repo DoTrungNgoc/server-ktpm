@@ -4,6 +4,7 @@ import com.ktpm.authservice.exception.NotFoundException;
 import com.ktpm.authservice.exception.ServiceException;
 import com.ktpm.authservice.model.User;
 import com.ktpm.authservice.repository.UserRepository;
+import com.ktpm.authservice.response.model.UserResponse;
 import com.ktpm.authservice.util.JwtTokenProvider;
 import com.ktpm.authservice.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import com.ktpm.authservice.request.LoginRequest;
 import com.ktpm.authservice.request.RegisterRequest;
 import com.serverktpm.response.auth.LoginResponse;
 import com.serverktpm.response.auth.RegisterResponse;
+
+import java.util.Optional;
 
 
 @Service
@@ -55,6 +58,15 @@ public class AuthService {
     public String getLoggedUserId() {
         String userIdString = SecurityContextHolder.getContext().getAuthentication().getName();
         return userIdString;
+    }
+
+    public UserResponse getUserByPhoneNumber(String phoneNumber) {
+        Optional<User> userOpt = userRepo.findByPhoneNumber(phoneNumber);
+        if (!userOpt.isPresent()) {
+            throw new NotFoundException("Not found userphoneNumber: " + phoneNumber);
+        }
+        UserResponse response = MapperUtil.mapObject(userOpt.get(), UserResponse.class);
+        return imageService.mapImageUserForUserResponse(userOpt.get(),response);
     }
 
 }
