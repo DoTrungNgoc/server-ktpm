@@ -17,7 +17,7 @@
       <module name="auth-service" target="17" />
       <module name="discovery-service" target="17" />
       <module name="gateway-service" target="17" />
-      <module name="main-service" target="17" />
+      <module name="main-service" target="8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
