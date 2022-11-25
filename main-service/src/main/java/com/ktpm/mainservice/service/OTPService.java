@@ -35,8 +35,9 @@ public class OTPService {
                 });
     }
 
-    @Retryable(value = Exception.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Retryable(value = Exception.class, maxAttempts = 5, backoff = @Backoff(delay = 1000))
     public boolean sendOTP(String phoneNumber) {
+        System.out.println("==============> send OTP");
         Twilio.init(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
         Message.creator(new PhoneNumber(phoneNumber),
                 new PhoneNumber(phoneFrom), "Your opt register account " + generateOTP(phoneNumber)).create();

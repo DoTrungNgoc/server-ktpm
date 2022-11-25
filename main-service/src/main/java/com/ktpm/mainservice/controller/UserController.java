@@ -5,6 +5,7 @@ import com.ktpm.mainservice.request.auth.model.ChangePasswordRequest;
 import com.ktpm.mainservice.request.auth.model.UserCreateRequest;
 import com.ktpm.mainservice.request.auth.model.UserUpdateRequest;
 import com.ktpm.mainservice.response.WrapResponse;
+import com.ktpm.mainservice.service.OTPService;
 import com.ktpm.mainservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
     private final UserService userService;
+    private final OTPService otpService;
 
     @PostMapping("/create")
     public WrapResponse create(@RequestBody UserCreateRequest request) {
@@ -35,5 +37,13 @@ public class UserController {
     @PostMapping("/change-password")
     public WrapResponse changePassword(@RequestBody @Valid ChangePasswordRequest request) {
         return WrapResponse.ok(userService.changePassword(request));
+    }
+
+    @PostMapping("/send-otp-verify-phone-number/{phoneNumber}")
+    public WrapResponse<Boolean> sendOtpVerifyPhone(@PathVariable String phoneNumber){
+       try {
+           return WrapResponse.ok(otpService.sendOTP(phoneNumber));
+       } catch (Exception e){};
+       return WrapResponse.error(505,"Error otp service");
     }
 }

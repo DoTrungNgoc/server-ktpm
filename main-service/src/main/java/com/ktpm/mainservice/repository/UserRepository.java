@@ -22,4 +22,7 @@ public interface UserRepository extends MongoRepository<User,String> {
 
     @CachePut(value = "user")
     User save(User user);
+
+    @Cacheable("user")
+    Optional<User> findById(String id);
 }
