@@ -4,8 +4,8 @@ import com.ktpm.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.serverktpm.request.auth.LoginRequest;
-import com.serverktpm.request.auth.RegisterRequest;
+import com.ktpm.authservice.request.LoginRequest;
+import com.ktpm.authservice.request.RegisterRequest;
 
 
 @RestController

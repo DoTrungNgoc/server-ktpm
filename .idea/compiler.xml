@@ -13,10 +13,10 @@
         <module name="gateway-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="auth-service" target="17" />
-      <module name="discovery-service" target="17" />
-      <module name="gateway-service" target="17" />
+    <bytecodeTargetLevel target="8">
+      <module name="auth-service" target="1.8" />
+      <module name="discovery-service" target="1.8" />
+      <module name="gateway-service" target="1.8" />
       <module name="main-service" target="17" />
     </bytecodeTargetLevel>
   </component>

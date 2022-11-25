@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.serverktpm.request.auth.LoginRequest;
-import com.serverktpm.request.auth.RegisterRequest;
+import com.ktpm.authservice.request.LoginRequest;
+import com.ktpm.authservice.request.RegisterRequest;
 import com.serverktpm.response.auth.LoginResponse;
 import com.serverktpm.response.auth.RegisterResponse;
 

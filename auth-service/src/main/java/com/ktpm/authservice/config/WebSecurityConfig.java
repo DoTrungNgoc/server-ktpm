@@ -7,16 +7,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.WebMvcSecurityConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @EnableWebSecurity
 @Configuration
-@EnableWebMvc
-public class WebSecurityConfig extends WebSecurityConfiguration {
-
-
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -28,7 +29,9 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().cors().disable().authorizeRequests().anyRequest().permitAll();
+    }
 
 }
 
